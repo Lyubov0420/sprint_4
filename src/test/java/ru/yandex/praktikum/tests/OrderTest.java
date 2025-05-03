@@ -1,55 +1,58 @@
 package ru.yandex.praktikum.tests;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import ru.yandex.praktikum.pages.MainPage;
-import ru.yandex.praktikum.pages.OrderPage1;
-import ru.yandex.praktikum.pages.OrderPage2;
+import ru.yandex.praktikum.pages.ScooterOrderForm;
+import ru.yandex.praktikum.pages.ScooterRentalDetailsForm;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OrderTest extends BaseTest {
 
-    @Test
-    public void testOrderFirstDataSet() {
+    @ParameterizedTest
+    @MethodSource("testData")
+    public void testOrder(
+            boolean useTopButton,  // Теперь всегда false
+            String name,
+            String lastName,
+            String address,
+            String phone,
+            String color,
+            String comment
+    ) {
         MainPage mainPage = new MainPage(driver);
-        OrderPage1 orderPage1 = new OrderPage1(driver);
-        OrderPage2 orderPage2 = new OrderPage2(driver);
+        ScooterOrderForm orderPage1 = new ScooterOrderForm(driver);
+        ScooterRentalDetailsForm orderPage2 = new ScooterRentalDetailsForm(driver);
 
         mainPage.open();
-        mainPage.clickOrderButton(true);
+        mainPage.clickOrderButton(false);  // Явно указываем false
 
-        orderPage1.fillPersonalData("Дмитрий", "Донской", "Самара", "79991234567");
+        orderPage1.fillPersonalData(name, lastName, address, phone);
         orderPage1.selectMetroStation();
         orderPage1.clickNextButton();
 
         orderPage2.selectOrderDate();
         orderPage2.selectRentPeriod();
-        orderPage2.selectBlackColor();
-        orderPage2.addComment("Тестовый заказ 1");
+        if ("black".equals(color)) {
+            orderPage2.selectBlackColor();
+        } else {
+            orderPage2.selectGreyColor();
+        }
+        orderPage2.addComment(comment);
         orderPage2.confirmOrder();
 
         assertTrue(orderPage2.isOrderConfirmed());
     }
 
-    @Test
-    public void testOrderSecondDataSet() {
-        MainPage mainPage = new MainPage(driver);
-        OrderPage1 orderPage1 = new OrderPage1(driver);
-        OrderPage2 orderPage2 = new OrderPage2(driver);
-
-        mainPage.open();
-        mainPage.clickOrderButton(false); // Используем нижнюю кнопку
-
-        orderPage1.fillPersonalData("Анна", "Смирнова", "Москва", "79998765432");
-        orderPage1.selectMetroStation();
-        orderPage1.clickNextButton();
-
-        orderPage2.selectOrderDate();
-        orderPage2.selectRentPeriod();
-        orderPage2.selectGreyColor();
-        orderPage2.addComment("Тестовый заказ 2");
-        orderPage2.confirmOrder();
-
-        assertTrue(orderPage2.isOrderConfirmed());
+    static Stream<Arguments> testData() {
+        return Stream.of(
+                Arguments.of(false, "Дмитрий", "Донской", "Самара", "79991234567", "black", "Тестовый заказ 1"),
+                Arguments.of(false, "Анна", "Смирнова", "Москва", "79998765432", "grey", "Тестовый заказ 2")
+        );
     }
 }

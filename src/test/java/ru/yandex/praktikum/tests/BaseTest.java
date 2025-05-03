@@ -21,6 +21,7 @@ public class BaseTest {
             WebDriverManager.chromedriver().setup();
             driver = new ChromeDriver();
         }
+        driver.manage().window().maximize(); // Добавила полноэкранный режим
     }
 
     @AfterEach

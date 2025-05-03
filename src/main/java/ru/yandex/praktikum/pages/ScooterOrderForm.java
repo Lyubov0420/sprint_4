@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class OrderPage1 {
+public class ScooterOrderForm {  // Испрпавила название класса
     private final WebDriver driver;
     private final WebDriverWait wait;
 
@@ -19,7 +19,7 @@ public class OrderPage1 {
     private final By nextButton = By.xpath(".//button[text()='Далее']");
     private final By metroStation = By.xpath(".//div[text()='Бульвар Рокоссовского']");
 
-    public OrderPage1(WebDriver driver) {
+    public ScooterOrderForm(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }

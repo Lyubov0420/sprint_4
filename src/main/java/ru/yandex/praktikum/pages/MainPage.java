@@ -10,6 +10,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class MainPage {
+
+    private static final String BASE_URL = "https://qa-scooter.praktikum-services.ru"; // Константа URL
+
+
+    private static final String FAQ_QUESTION_PATTERN = "accordion__heading-%d"; // Паттерны локаторов
+    private static final String FAQ_ANSWER_PATTERN = "accordion__panel-%d"; // Паттерны локаторов
+
     private final WebDriver driver;
     private final WebDriverWait wait;
 
@@ -24,7 +31,7 @@ public class MainPage {
     }
 
     public void open() {
-        driver.get("https://qa-scooter.praktikum-services.ru");
+        driver.get(BASE_URL); // Исправила на использование константы
         try {
             driver.findElement(cookieButton).click(); // Закрываем куки
         } catch (Exception e) {
@@ -47,8 +54,8 @@ public class MainPage {
     }
 
     public String getFAQAnswer(int questionIndex) {
-        By question = By.id(String.format("accordion__heading-%d", questionIndex));
-        By answer = By.id(String.format("accordion__panel-%d", questionIndex));
+        By question = By.id(String.format(FAQ_QUESTION_PATTERN, questionIndex));
+        By answer = By.id(String.format(FAQ_ANSWER_PATTERN, questionIndex));
 
         wait.until(ExpectedConditions.elementToBeClickable(question)).click();
         return wait.until(ExpectedConditions.visibilityOfElementLocated(answer)).getText();

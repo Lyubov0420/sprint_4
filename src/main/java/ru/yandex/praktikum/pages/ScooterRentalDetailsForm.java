@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class OrderPage2 {
+public class ScooterRentalDetailsForm {  // Исправила, по тем же соображениям, что и OrderPage1
     private final WebDriver driver;
     private final WebDriverWait wait;
 
@@ -18,11 +18,11 @@ public class OrderPage2 {
     private final By blackColor = By.id("black"); //цвет самоката черный
     private final By greyColor = By.xpath("//input[@id='grey']");
     private final By commentField = By.xpath(".//input[@placeholder='Комментарий для курьера']"); //коммент доставке
-    private final By confirmButton = By.xpath(".//button[text()='Заказать']");
+    private final By finalOrderButton = By.xpath("(//button[contains(@class, 'Button_Button__ra12g') and text()='Заказать'])[2]"); // Нижняя кнопка Заказать
     private final By yesButton = By.xpath(".//button[text()='Да']"); //кнопка Да
     private final By successModal = By.className("Order_ModalHeader");
 
-    public OrderPage2(WebDriver driver) {
+    public ScooterRentalDetailsForm(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
@@ -49,8 +49,7 @@ public class OrderPage2 {
     }
 
     public void confirmOrder() {
-        driver.findElement(confirmButton).click();
-        wait.until(ExpectedConditions.elementToBeClickable(yesButton)).click();
+        driver.findElement(finalOrderButton).click();
     }
 
     public boolean isOrderConfirmed() {
