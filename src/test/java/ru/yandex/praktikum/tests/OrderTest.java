@@ -17,7 +17,7 @@ public class OrderTest extends BaseTest {
     @ParameterizedTest
     @MethodSource("testData")
     public void testOrder(
-            boolean useTopButton,  // Теперь всегда false
+            boolean useTopButton,  // true - верхняя кнопка, false - нижняя
             String name,
             String lastName,
             String address,
@@ -30,7 +30,7 @@ public class OrderTest extends BaseTest {
         ScooterRentalDetailsForm orderPage2 = new ScooterRentalDetailsForm(driver);
 
         mainPage.open();
-        mainPage.clickOrderButton(false);  // Явно указываем false
+        mainPage.clickOrderButton(useTopButton); // Использ. нижнюю кнопку Заказать
 
         orderPage1.fillPersonalData(name, lastName, address, phone);
         orderPage1.selectMetroStation();
@@ -49,9 +49,12 @@ public class OrderTest extends BaseTest {
         assertTrue(orderPage2.isOrderConfirmed());
     }
 
-    static Stream<Arguments> testData() {
+    static Stream<Arguments> testData() {  // Проверка обеих кнопок
         return Stream.of(
+
+                Arguments.of(true, "Дмитрий", "Донской", "Самара", "79991234567", "black", "Тестовый заказ 1"),
                 Arguments.of(false, "Дмитрий", "Донской", "Самара", "79991234567", "black", "Тестовый заказ 1"),
+                Arguments.of(true, "Анна", "Смирнова", "Москва", "79998765432", "grey", "Тестовый заказ 2"),
                 Arguments.of(false, "Анна", "Смирнова", "Москва", "79998765432", "grey", "Тестовый заказ 2")
         );
     }

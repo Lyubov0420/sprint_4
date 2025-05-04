@@ -39,18 +39,24 @@ public class MainPage {
         }
     }
 
-    public void clickOrderButton(boolean isTop) {
-        By button = isTop ? orderButtonTop : orderButtonBottom;
-        wait.until(ExpectedConditions.elementToBeClickable(button)).click();
+    public void clickOrderButton(boolean useTopButton) {
+        if (useTopButton) {
+            // Клик по верхней кнопке
+            driver.findElement(orderButtonTop).click();
+        } else {
+            // Для нижней кнопки - прокрутка и клик
+            WebElement button = driver.findElement(orderButtonBottom);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", button);
+            button.click();
+        }
     }
 
     public void scrollToFAQ() {
-        // Добавляем проверку, что страница полностью загрузилась
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete'"));
+        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete'")); // Добавляем проверку, что страница полностью загрузилась
 
-        // Прокручиваем к разделу FAQ
+
         WebElement element = driver.findElement(faqSection);
-        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();", element);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element); // Прокручиваем к разделу FAQ
     }
 
     public String getFAQAnswer(int questionIndex) {

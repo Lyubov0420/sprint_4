@@ -28,31 +28,33 @@ public class ScooterRentalDetailsForm {  // Исправила, по тем же
     }
 
     public void selectOrderDate() {
-        driver.findElement(orderDate).click();
-        driver.findElement(exactDate).click();
+        wait.until(ExpectedConditions.elementToBeClickable(orderDate)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(exactDate)).click();
     }
 
     public void selectRentPeriod() {
-        driver.findElement(rentPeriod).click();
-        driver.findElements(rentPeriodOption).get(0).click();
+        wait.until(ExpectedConditions.elementToBeClickable(rentPeriod)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(rentPeriodOption)).click();
     }
 
     public void selectBlackColor() {
-        driver.findElement(blackColor).click();
+        wait.until(ExpectedConditions.elementToBeClickable(blackColor)).click();
     }
 
     public void selectGreyColor() {
-        driver.findElement(greyColor).click();
+        wait.until(ExpectedConditions.elementToBeClickable(greyColor)).click();
     }
+
     public void addComment(String comment) {
-        driver.findElement(commentField).sendKeys(comment);
+        wait.until(ExpectedConditions.elementToBeClickable(commentField)).sendKeys(comment);
     }
 
     public void confirmOrder() {
-        driver.findElement(finalOrderButton).click();
+        wait.until(ExpectedConditions.elementToBeClickable(finalOrderButton)).click(); // Нижняя кнопка Заказать в форме аренды
+        wait.until(ExpectedConditions.elementToBeClickable(yesButton)).click(); // Кнопка Да
     }
 
     public boolean isOrderConfirmed() {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(successModal)).isDisplayed();
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(successModal)).isDisplayed(); // Проверка оформления заказа
     }
 }
